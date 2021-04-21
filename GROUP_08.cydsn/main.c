@@ -8,6 +8,33 @@
 #include "stdio.h"
 #include "InterruptRoutines.h"
 
+//numero registri nello slave
+#define SLAVE_BUFFER_SIZE 7
+//definisco il buffer contenente i registri
+uint8_t slaveBuffer[SLAVE_BUFFER_SIZE];
+
+/* Start EZI2C Component */
+EZI2C_Start();
+
+//INIZIALIZZAZIONE REGISTRI
+//Control Register 0
+slaveBuffer[0] = 0x14; // dubbio: i primi due bit riservati vanno messi a 0?
+//Control Register 1: periodo del timer -> 4 ms, scrivo 4 (?)
+slaveBuffer[1] = 0x04; //4ms
+//Who Am I Register
+slaveBuffer[2] = 0xBC;
+//Ch0 Bit 15-8
+slaveBuffer[3] = 0x00;
+//Ch0 Bit 07-0
+slaveBuffer[4] = 0x00;
+//Ch1 Bit 15-8
+slaveBuffer[5] = 0x00;
+//Ch1 Bit 07-0
+slaveBuffer[6] = 0x00;
+       
+// Set up EZI2C buffer
+EZI2C_SetBuffer1(SLAVE_BUFFER_SIZE, SLAVE_BUFFER_SIZE - 1 ,slaveBuffer);
+
 //variables definition
 int32 value_digit=0;
 //int32 value_digit_Temp=0;
