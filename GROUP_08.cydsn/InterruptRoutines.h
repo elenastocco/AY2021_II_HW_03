@@ -16,13 +16,15 @@
     #include "stdio.h"
     
     #define TRANSMIT_BUFFER_SIZE 16
+    #define SAMPLES 5
+    #define LDR_SAMPLING 0
+    #define TEMP_SAMPLING 1
     
     CY_ISR_PROTO (Custom_ISR_ADC);
     
     char DataBuffer[TRANSMIT_BUFFER_SIZE];
     volatile uint8 PacketReadyFlag;
-    volatile uint8 FirstSampleReadyFlag;
-    volatile uint8 SampleReadyFlag;
+    
 #endif
     
     
