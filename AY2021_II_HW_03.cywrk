@@ -19,6 +19,7 @@
 <v>.\GROUP_10.cydsn\GROUP_10.cyprj</v>
 <v>.\GROUP_11.cydsn\GROUP_11.cyprj</v>
 <v>.\GROUP_08_Copy_01.cydsn\GROUP_08_Copy_01.cyprj</v>
+<v>..\..\biosensors\PSoC-I2C-Class\01-I2C_Slave.cydsn\01-I2C_Slave.cyprj</v>
 </projects>
 <workspace_id v="7e308a46-153f-4ec6-9665-17b9b4845587" />
 <WriteAppVersionLastSavedWith v="4.4.0.80" />

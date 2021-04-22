@@ -1,12 +1,16 @@
 /* ========================================
- *
- *  main.c file
+ * -scrittura registri non funziona: capire come scrivergli con il 
+ *  bridge control panel
+ * -verifica cast che sia giusto e divisione in msb e lsb
+ * -debug: come leggere variabili
  *  
 
 */
 #include "project.h"
 #include "stdio.h"
 #include "InterruptRoutines.h"
+
+
 
 //numero registri nello slave
 #define SLAVE_BUFFER_SIZE 7
@@ -34,6 +38,10 @@ int32 sum_LDR=0;
 int32 mean_LDR=0;
 int32 sum_temp=0;
 int32 mean_temp=0;
+uint8_t msb_LDR=0;
+uint8_t lsb_LDR=0;
+uint8_t msb_temp=0;
+uint8_t lsb_temp=0;
 
 
 int main(void)
@@ -66,12 +74,16 @@ int main(void)
     slaveBuffer[6] = 0x00;
        
     // Set up EZI2C buffer
-    EZI2C_SetBuffer1(SLAVE_BUFFER_SIZE, SLAVE_BUFFER_SIZE - 1 ,slaveBuffer);
+    EZI2C_SetBuffer1(SLAVE_BUFFER_SIZE, 2 ,slaveBuffer);
     
-    sprintf(DataBuffer, "channel_0: %ld \r\n", channel_0_ON);
-    UART_PutString(DataBuffer);
-    sprintf(DataBuffer, "channel_1: %ld \r\n", channel_1_ON);
-    UART_PutString(DataBuffer);
+    //sprintf(DataBuffer, "channel_0: %ld \r\n", channel_0_ON);
+    //UART_PutString(DataBuffer);
+    //sprintf(DataBuffer, "channel_1: %ld \r\n", channel_1_ON);
+    //UART_PutString(DataBuffer);
+    if((channel_0_ON == 1) && (channel_1_ON == 1)){
+        Blue_LED_Write(LED_ON);
+    }
+    else Blue_LED_Write(LED_OFF);
 
     for(;;)
     
@@ -81,6 +93,8 @@ int main(void)
             PacketReadyFlagLDR=0;
             count_LDR++;
             LDR_values[count_LDR]=value_mv_LDR;
+            sprintf(DataBuffer, "sample_LDR: %ld mV\r\n", value_mv_LDR);
+            UART_PutString(DataBuffer);
             sum_LDR+=LDR_values[count_LDR];
             mean_LDR=sum_LDR/5;        
             
@@ -91,6 +105,17 @@ int main(void)
                 sprintf(DataBuffer, "average_LDR: %ld mV\r\n", mean_LDR);
                 UART_PutString(DataBuffer);
                 PacketReadyFlagLDR=0;
+                //scrivo la media nei registri 0x03 e 0x04
+                /* la media è salvata in un int32, a me servono 16 bit quindi
+                devo fare un cast a 16 bit, dividere i 16 bit in MSB e LSB e
+                metterli nel registro
+                */
+                mean_LDR = (int16)mean_LDR;
+                msb_LDR =(mean_LDR & 0xF0)>>8;
+                lsb_LDR = (mean_LDR & 0x0F);
+                slaveBuffer[3]=msb_LDR;
+                slaveBuffer[4]=lsb_LDR;
+                
                 sum_LDR=0;
                 mean_LDR=0;   
             }
@@ -101,6 +126,8 @@ int main(void)
                 PacketReadyFlagTemp=0;
                 count_Temp++;
                 Temp_values[count_Temp]=value_mv_Temp;
+                sprintf(DataBuffer, "sample_Temp: %ld mV\r\n", value_mv_Temp);
+                UART_PutString(DataBuffer);
                 sum_temp+=Temp_values[count_Temp];
                 mean_temp=sum_temp/5;
                 
@@ -110,11 +137,19 @@ int main(void)
                     sprintf(DataBuffer, "average_Temp: %ld mV\r\n", mean_temp);
                     UART_PutString(DataBuffer);
                     PacketReadyFlagTemp=0;
+                    //scrittura registri
+                    mean_temp = (int16)mean_temp;
+                    msb_temp =(mean_temp & 0xF0)>>8;
+                    lsb_temp = (mean_temp & 0x0F);
+                    slaveBuffer[3]=msb_temp;
+                    slaveBuffer[4]=lsb_temp;
+                    
                     sum_temp=0;
                     mean_temp=0;
                 }
             
-    }
+        }
+        
 }
 }
 
