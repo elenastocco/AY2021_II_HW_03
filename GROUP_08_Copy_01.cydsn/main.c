@@ -35,9 +35,9 @@ int status=LDR_SAMPLING;
 int32 LDR_values[SAMPLES];
 int32 Temp_values[SAMPLES];
 int32 sum_LDR=0;
-int32 mean_LDR=0;
+int16 mean_LDR=0;
 int32 sum_temp=0;
-int32 mean_temp=0;
+int16 mean_temp=0;
 uint8_t msb_LDR=0;
 uint8_t lsb_LDR=0;
 uint8_t msb_temp=0;
@@ -89,14 +89,15 @@ int main(void)
     
     { 
         if(channel_0_ON){
-            while(!PacketReadyFlagLDR==1);
+            if(PacketReadyFlagLDR==1){
             PacketReadyFlagLDR=0;
             count_LDR++;
             LDR_values[count_LDR]=value_mv_LDR;
             sprintf(DataBuffer, "sample_LDR: %ld mV\r\n", value_mv_LDR);
             UART_PutString(DataBuffer);
             sum_LDR+=LDR_values[count_LDR];
-            mean_LDR=sum_LDR/5;        
+            mean_LDR=sum_LDR/5;   
+            }
             
         
             //quando il count arriva a 5 ho già acquisito i 5 campioni LDR quindi posso passare al canale Temp
@@ -110,7 +111,6 @@ int main(void)
                 devo fare un cast a 16 bit, dividere i 16 bit in MSB e LSB e
                 metterli nel registro
                 */
-                mean_LDR = (int16)mean_LDR;
                 msb_LDR =(mean_LDR & 0xF0)>>8;
                 lsb_LDR = (mean_LDR & 0x0F);
                 slaveBuffer[3]=msb_LDR;
@@ -122,7 +122,7 @@ int main(void)
                 
             }
         if(channel_1_ON){
-            while(!PacketReadyFlagTemp==1);
+            if(PacketReadyFlagTemp==1){
                 PacketReadyFlagTemp=0;
                 count_Temp++;
                 Temp_values[count_Temp]=value_mv_Temp;
@@ -130,6 +130,7 @@ int main(void)
                 UART_PutString(DataBuffer);
                 sum_temp+=Temp_values[count_Temp];
                 mean_temp=sum_temp/5;
+            }
                 
                 //se il count è a 5, ho già i 5 samples e posso cambiare stato
                 if (count_Temp==5){
@@ -138,7 +139,6 @@ int main(void)
                     UART_PutString(DataBuffer);
                     PacketReadyFlagTemp=0;
                     //scrittura registri
-                    mean_temp = (int16)mean_temp;
                     msb_temp =(mean_temp & 0xF0)>>8;
                     lsb_temp = (mean_temp & 0x0F);
                     slaveBuffer[3]=msb_temp;
