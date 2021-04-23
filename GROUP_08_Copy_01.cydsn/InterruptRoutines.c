@@ -73,7 +73,7 @@ CY_ISR(Custom_ISR_ADC){
 void EZI2C_ISR_ExitCallback(void)
 {
     //update control register if it was updated
-    /*if (slaveBuffer[0] != control_reg_0)
+    if (slaveBuffer[0] != control_reg_0)
     {
         //lo stato è cambiato, devo cambiare il canale
         //se il bit del canale 0 è a 1 (bit meno significativo), attivo canale 0
@@ -86,38 +86,15 @@ void EZI2C_ISR_ExitCallback(void)
         control_reg_0 = slaveBuffer[0];
         
     }
-    */
-    if(slaveBuffer[0] != control_reg_0){
-        int channel_select = (slaveBuffer[0] & 0x03);
-        if (channel_select == 0){
-            channel_0_ON = 0;
-            channel_1_ON = 0;
-        }
-        if (channel_select == 1){
-            channel_0_ON = 1;
-            channel_1_ON = 0;
-        }
-        if (channel_select == 2){
-            channel_0_ON = 0;
-            channel_1_ON = 1;
-        }
-        if (channel_select == 3){
-            channel_0_ON = 1;
-            channel_1_ON = 1;
-        }
-        control_reg_0 = slaveBuffer[0];
-        
-    }
+    
+ 
     //se entrambi i canali sono attivati, accendo il LED
-    /*if((channel_0_ON == 1) && (channel_1_ON == 1)){
+    if((channel_0_ON == 1) && (channel_1_ON == 1)){
         Blue_LED_Write(LED_ON);
     }
     else Blue_LED_Write(LED_OFF);
-    */
-    if((control_reg_0 & 0x03) == 3){
-        Blue_LED_Write(LED_ON);
-    }
-    else Blue_LED_Write(LED_OFF);
+    
+ 
      
 }
 
