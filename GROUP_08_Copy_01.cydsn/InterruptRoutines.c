@@ -32,6 +32,10 @@ extern volatile uint8_t channel_0_ON;
 extern volatile uint8_t channel_1_ON;
 extern volatile uint8_t slaveBuffer[SLAVE_BUFFER_SIZE];
 extern volatile uint8_t timer_period;
+extern volatile uint8_t samples;
+uint8_t new_sample=0;
+extern volatile int count_LDR;
+extern volatile int count_Temp;
 
 /* mandare la media alla frequenza di 50 Hz: se la frequenza dell'isr è 
 *  250 Hz, ogni 5 esecuzioni di ISR (ovvero ogni volta che ho calcolato la media),
@@ -47,7 +51,7 @@ extern volatile uint8_t timer_period;
 CY_ISR(Custom_ISR_ADC){
     // Read Timer status register to bring interrupt line low
     if(channel_0_ON){
-        AMux_Start();
+      //  AMux_Start();
         AMux_FastSelect(0);
         Timer_ReadStatusRegister();
         ADC_DelSig_StartConvert();
@@ -56,11 +60,12 @@ CY_ISR(Custom_ISR_ADC){
         if (value_digit_LDR >65535) value_digit_LDR = 65535;
         value_mv_LDR= ADC_DelSig_CountsTo_mVolts(value_digit_LDR);
         ADC_DelSig_StopConvert();
-        AMux_Stop();
+       // AMux_Stop();
 	    PacketReadyFlagLDR=1;
+       // count_LDR++;
     }
     if(channel_1_ON){
-        AMux_Start();
+       //AMux_Start();
         AMux_FastSelect(1);
         Timer_ReadStatusRegister();
         ADC_DelSig_StartConvert();
@@ -69,8 +74,9 @@ CY_ISR(Custom_ISR_ADC){
         if (value_digit_Temp >65535) value_digit_Temp = 65535;
         value_mv_Temp= ADC_DelSig_CountsTo_mVolts(value_digit_Temp);
         ADC_DelSig_StopConvert();
-        AMux_Stop();
+        //AMux_Stop();
 	    PacketReadyFlagTemp=1;
+        //count_Temp++;
     }
 }
 
@@ -92,8 +98,8 @@ void EZI2C_ISR_ExitCallback(void)
         //se è stato modificato il numero di campioni da mediare
         //3C correisponde a 00111100 e va a selezionare i bit 2-5, poi
         //shifto di 2
-        new_samples=(slaveBuffer[0] & 0x3C)>>2;
-        if(new_samples != samples) samples = new_sample;
+        new_sample=(slaveBuffer[0] & 0x3C)>>2;
+        if(new_sample != samples) samples = new_sample;
         
         control_reg_0 = slaveBuffer[0];
         
