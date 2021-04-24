@@ -44,7 +44,7 @@ uint8_t msb_LDR=0;
 uint8_t lsb_LDR=0;
 uint8_t msb_temp=0;
 uint8_t lsb_temp=0;
-uint8_t timer_period=0;
+int16 timer_period=0;
 
 
 int main(void)
@@ -93,9 +93,6 @@ int main(void)
             LDR_values+=value_mv_LDR;
             PacketReadyFlagLDR=0;
             count_LDR++;
-              
-            
-            
             //quando il count arriva a 5 ho già acquisito i 5 campioni LDR quindi posso passare al canale Temp
             if (count_LDR==samples){
                 count_LDR=0;
@@ -124,13 +121,7 @@ int main(void)
             PacketReadyFlagTemp=0;
             
             Temp_values+=value_mv_Temp;
-       
-           
-            
             count_Temp++;   
-        
-            
-            
             //quando il count arriva a 5 ho già acquisito i 5 campioni LDR quindi posso passare al canale Temp
             if (count_Temp==samples){
                 count_Temp=0;
