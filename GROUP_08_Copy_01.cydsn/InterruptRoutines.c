@@ -119,8 +119,10 @@ void EZI2C_ISR_ExitCallback(void)
     
     //se è stato cambiato il timer
     if (slaveBuffer[1] != timer_period)
-    {
-        Timer_WritePeriod(slaveBuffer[1]);
+    {   
+        Timer_Stop();
+        Timer_WriteCounter(slaveBuffer[1]);
+        Timer_Start();
         timer_period = slaveBuffer[1];
     }
     else
