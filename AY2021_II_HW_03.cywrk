@@ -28,7 +28,7 @@
 <wrkspc_dependencies>
 <wrkspc_dependency project="GROUP_08.cydsn\GROUP_08.cyprj" dependency="..\..\PSoC\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
 <wrkspc_dependency project="GROUP_08.cydsn\GROUP_08.cyprj" dependency="..\PSoC\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
-<wrkspc_dependency project="GROUP_08_Copy_01.cydsn\GROUP_08_Copy_01.cyprj" dependency="..\..\..\Libraries\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
+<wrkspc_dependency project="GROUP_08_Copy_01.cydsn\GROUP_08_Copy_01.cyprj" dependency="..\..\PSoC\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
 <wrkspc_dependency project="GROUP_08_Copy_01.cydsn\GROUP_08_Copy_01.cyprj" dependency="${CyRoot}\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj" />
 </wrkspc_dependencies>
 </CyGuid_dcbd9771-0334-43dc-9cc3-fe99dc3c5316>

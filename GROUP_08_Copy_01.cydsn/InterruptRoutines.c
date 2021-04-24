@@ -20,6 +20,11 @@ extern volatile int32 value_digit_Temp;
 extern volatile int32 value_mv_LDR;
 extern volatile int32 value_mv_Temp;
 
+extern volatile uint8_t msb_LDR;
+extern volatile uint8_t lsb_LDR;
+extern volatile uint8_t msb_temp;
+extern volatile uint8_t lsb_temp;
+
 extern volatile int count_LDR;
 extern volatile int count_Temp;
 extern volatile uint8_t control_reg_0;
@@ -86,16 +91,18 @@ void EZI2C_ISR_ExitCallback(void)
         control_reg_0 = slaveBuffer[0];
         
     }
+    //se non ho scritto il valore (ad esempio se ho mandato un comando di lettura)
+    //ri-aggiorno slaveBuffer all'ultimo valore 
+    else
+    {
+        slaveBuffer[0] = control_reg_0;
+    }
     
- 
     //se entrambi i canali sono attivati, accendo il LED
     if((channel_0_ON == 1) && (channel_1_ON == 1)){
         Blue_LED_Write(LED_ON);
     }
-    else Blue_LED_Write(LED_OFF);
-    
- 
-     
+    else Blue_LED_Write(LED_OFF);    
 }
 
 /* [] END OF FILE */
