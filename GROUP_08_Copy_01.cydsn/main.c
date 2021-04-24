@@ -18,8 +18,8 @@
 //definisco il buffer contenente i registri
 uint8_t slaveBuffer[SLAVE_BUFFER_SIZE];
 uint8_t control_reg_0 = 0x14;
-uint8_t channel_0_ON = 0;
-uint8_t channel_1_ON = 1;
+uint8_t channel_0_ON = 1;
+uint8_t channel_1_ON = 0;
 
 //variables definition
 //int32 value_digit=0;
@@ -43,6 +43,7 @@ uint8_t msb_LDR=0;
 uint8_t lsb_LDR=0;
 uint8_t msb_temp=0;
 uint8_t lsb_temp=0;
+uint8_t timer_period=0;
 
 
 int main(void)
@@ -62,7 +63,9 @@ int main(void)
     //Control Register 0
     slaveBuffer[0] = control_reg_0; // dubbio: i primi due bit riservati vanno messi a 0?
     //Control Register 1: periodo del timer -> 4 ms, scrivo 4 (?)
-    slaveBuffer[1] = Timer_ReadPeriod(); //4ms
+    timer_period = Timer_ReadPeriod();
+    
+    slaveBuffer[1] = timer_period; //4ms
     //Who Am I Register
     slaveBuffer[2] = 0xBC;
     //Ch0 Bit 15-8
@@ -101,11 +104,11 @@ int main(void)
             }
             
             //quando il count arriva a 5 ho già acquisito i 5 campioni LDR quindi posso passare al canale Temp
-            if (count_LDR==5){
+            if (count_LDR==samples){
                 count_LDR=0;
                 sprintf(DataBuffer, "sum_LDR: %hd mV\r\n", sum_LDR);
                 UART_PutString(DataBuffer);
-                mean_LDR=sum_LDR/5;
+                mean_LDR=sum_LDR/samples;
                 sprintf(DataBuffer, "average_LDR: %hd mV\r\n", mean_LDR);
                 UART_PutString(DataBuffer);
                 PacketReadyFlagLDR=0;
@@ -140,9 +143,9 @@ int main(void)
             }
             
             //quando il count arriva a 5 ho già acquisito i 5 campioni LDR quindi posso passare al canale Temp
-            if (count_Temp==5){
+            if (count_Temp==samples){
                 count_Temp=0;
-                mean_temp=sum_temp/5;
+                mean_temp=sum_temp/samples;
                 sprintf(DataBuffer, "average_temp: %hd mV\r\n", mean_temp);
                 UART_PutString(DataBuffer);
                 PacketReadyFlagTemp=0;

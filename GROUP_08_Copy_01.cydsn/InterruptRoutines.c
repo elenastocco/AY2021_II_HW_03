@@ -31,6 +31,7 @@ extern volatile uint8_t control_reg_0;
 extern volatile uint8_t channel_0_ON;
 extern volatile uint8_t channel_1_ON;
 extern volatile uint8_t slaveBuffer[SLAVE_BUFFER_SIZE];
+extern volatile uint8_t timer_period;
 
 /* mandare la media alla frequenza di 50 Hz: se la frequenza dell'isr è 
 *  250 Hz, ogni 5 esecuzioni di ISR (ovvero ogni volta che ho calcolato la media),
@@ -88,6 +89,12 @@ void EZI2C_ISR_ExitCallback(void)
         if((slaveBuffer[0] & 0x02) == 2) channel_1_ON = 1;
         else channel_1_ON = 0;
         
+        //se è stato modificato il numero di campioni da mediare
+        //3C correisponde a 00111100 e va a selezionare i bit 2-5, poi
+        //shifto di 2
+        new_samples=(slaveBuffer[0] & 0x3C)>>2;
+        if(new_samples != samples) samples = new_sample;
+        
         control_reg_0 = slaveBuffer[0];
         
     }
@@ -102,7 +109,18 @@ void EZI2C_ISR_ExitCallback(void)
     if((channel_0_ON == 1) && (channel_1_ON == 1)){
         Blue_LED_Write(LED_ON);
     }
-    else Blue_LED_Write(LED_OFF);    
+    else Blue_LED_Write(LED_OFF);
+    
+    //se è stato cambiato il timer
+    if (slaveBuffer[1] != timer_period)
+    {
+        Timer_WritePeriod(slaveBuffer[1]);
+        timer_period = slaveBuffer[1];
+    }
+    else
+    {
+        slaveBuffer[1] = timer_period;
+    }
 }
 
 /* [] END OF FILE */
