@@ -3,7 +3,7 @@
 <!--This file is machine generated and read. It is not intended to be edited by hand.-->
 <!--Due to this, there is no schema for this file.-->
 <CyGuid_2867d519-54d2-4c01-9830-c51cb08bc3dd type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize" version="5" xml_contents_version="3" name="AY2021_II_HW_03" persistent="AY2021_II_HW_03.cywrk" platform="NOT_USED">
-<current_project name=".\GROUP_08_Copy_01.cydsn\GROUP_08_Copy_01.cyprj" />
+<current_project name=".\GROUP_08.cydsn\GROUP_08.cyprj" />
 <wrkspc_folders />
 <files />
 <projects>
@@ -14,12 +14,10 @@
 <v>.\GROUP_05.cydsn\GROUP_05.cyprj</v>
 <v>.\GROUP_06.cydsn\GROUP_06.cyprj</v>
 <v>.\GROUP_07.cydsn\GROUP_07.cyprj</v>
-<v>.\GROUP_08.cydsn\GROUP_08.cyprj</v>
 <v>.\GROUP_09.cydsn\GROUP_09.cyprj</v>
 <v>.\GROUP_10.cydsn\GROUP_10.cyprj</v>
 <v>.\GROUP_11.cydsn\GROUP_11.cyprj</v>
-<v>.\GROUP_08_Copy_01.cydsn\GROUP_08_Copy_01.cyprj</v>
-<v>..\..\biosensors\PSoC-I2C-Class\01-I2C_Slave.cydsn\01-I2C_Slave.cyprj</v>
+<v>.\GROUP_08.cydsn\GROUP_08.cyprj</v>
 </projects>
 <workspace_id v="7e308a46-153f-4ec6-9665-17b9b4845587" />
 <WriteAppVersionLastSavedWith v="4.4.0.80" />
@@ -27,9 +25,7 @@
 <CyGuid_dcbd9771-0334-43dc-9cc3-fe99dc3c5316 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize+CyPrjDependencyList" version="4">
 <wrkspc_dependencies>
 <wrkspc_dependency project="GROUP_08.cydsn\GROUP_08.cyprj" dependency="..\..\PSoC\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
-<wrkspc_dependency project="GROUP_08.cydsn\GROUP_08.cyprj" dependency="..\PSoC\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
-<wrkspc_dependency project="GROUP_08_Copy_01.cydsn\GROUP_08_Copy_01.cyprj" dependency="..\..\..\Libraries\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
-<wrkspc_dependency project="GROUP_08_Copy_01.cydsn\GROUP_08_Copy_01.cyprj" dependency="${CyRoot}\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj" />
+<wrkspc_dependency project="GROUP_08.cydsn\GROUP_08.cyprj" dependency="${CyRoot}\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj" />
 </wrkspc_dependencies>
 </CyGuid_dcbd9771-0334-43dc-9cc3-fe99dc3c5316>
 <CyGuid_63b68103-67f5-4406-8da6-5c8625765b82 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize+CyIgnoredSystemDepsList" version="1">
