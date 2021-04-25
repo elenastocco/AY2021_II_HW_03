@@ -18,9 +18,9 @@
 
 //definisco il buffer contenente i registri
 uint8_t slaveBuffer[SLAVE_BUFFER_SIZE];
-uint8_t control_reg_0 = 0x14;
-uint8_t channel_0_ON = 1;
-uint8_t channel_1_ON = 1;
+uint8_t control_reg_0 = 0x00;
+uint8_t channel_0_ON = 0;
+uint8_t channel_1_ON = 0;
 
 //variables definition
 //int32 value_digit=0;
@@ -38,7 +38,7 @@ int32 Temp_values=0;
 int32 sum_LDR=0;
 int16 mean_LDR=0;
 int32 sum_temp=0;
-uint8_t samples=5;
+uint8_t samples=0;
 uint16 mean_temp=0;
 uint8_t msb_LDR=0;
 uint8_t lsb_LDR=0;
@@ -62,15 +62,15 @@ int main(void)
     //Control Register 0
     slaveBuffer[0] = control_reg_0; // dubbio: i primi due bit riservati vanno messi a 0?
     //Control Register 1: periodo del timer -> 4 ms, scrivo 4 (?)
-    timer_period = Timer_ReadPeriod();
+    timer_period = Timer_ReadCounter();
     
     slaveBuffer[1] = timer_period; //4ms
     //Who Am I Register
     slaveBuffer[2] = 0xBC;
     //Ch0 Bit 15-8
-    slaveBuffer[3] = 0x02;
+    slaveBuffer[3] = 0x00;
     //Ch0 Bit 07-0
-    slaveBuffer[4] = 0xFF;
+    slaveBuffer[4] = 0x00;
     //Ch1 Bit 15-8
     slaveBuffer[5] = 0x00;
     //Ch1 Bit 07-0
