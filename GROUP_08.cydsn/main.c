@@ -48,7 +48,8 @@ int main(void)
     timer_period = Timer_ReadCounter();
     
     //REGISTERS INITIALIZATION
-    slaveBuffer[0] = CONTROL_REG_0_INIT; //Control Register 0
+    slaveBuffer[0] &= INIT_CONTROL_REG_0;//Control Register 0
+    control_reg_0 = slaveBuffer[0];
     slaveBuffer[1] = timer_period; //Control Register 1
     slaveBuffer[2] = 0xBC; //Who Am I Register
     slaveBuffer[3] = 0x00;//Ch0 Bit 15-8
@@ -66,7 +67,7 @@ int main(void)
             Temp_values += value_mv_Temp;
             PacketReadyFlagTemp = 0;
             count_Temp++;
-        }
+        
          
             if (count_Temp == samples){ 
                 mean_temp = Temp_values/samples;
@@ -79,14 +80,14 @@ int main(void)
                 Temp_values = 0;
                 mean_temp = 0;   
             }
+        }
                 
         
         if(channel_1_ON && (PacketReadyFlagLDR==1)){
             PacketReadyFlagLDR = 0;
             LDR_values += value_mv_LDR;
             count_LDR++;  
-        }
-            
+          
             if (count_LDR == samples){
                 mean_LDR=LDR_values/samples;
                 msb_LDR =mean_LDR>>8;
@@ -98,7 +99,7 @@ int main(void)
                 LDR_values=0;
                 mean_LDR=0;   
             }
-               
+        } 
         }
 }
     
