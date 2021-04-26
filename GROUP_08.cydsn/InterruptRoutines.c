@@ -28,24 +28,24 @@ CY_ISR(Custom_ISR_ADC){
         AMux_Stop();
         AMux_Select(CHANNEL_0_TEMP);
         AMux_Start();
-        ADC_DelSig_StartConvert();
+       // ADC_DelSig_StartConvert();
         value_digit_Temp = ADC_DelSig_Read32();
         if (value_digit_Temp < 0) value_digit_Temp = 0;
         if (value_digit_Temp >65535) value_digit_Temp = 65535;
         value_mv_Temp= ADC_DelSig_CountsTo_mVolts(value_digit_Temp);
-        ADC_DelSig_StopConvert();
+       // ADC_DelSig_StopConvert();
 	    PacketReadyFlagTemp=1;
     }
     if(channel_1_ON){
         AMux_Stop();
         AMux_Select(CHANNEL_1_LDR);
         AMux_Start();
-        ADC_DelSig_StartConvert();
+        //ADC_DelSig_StartConvert();
         value_digit_LDR = ADC_DelSig_Read32();
         if (value_digit_LDR < 0) value_digit_LDR = 0;
         if (value_digit_LDR >65535) value_digit_LDR = 65535;
         value_mv_LDR= ADC_DelSig_CountsTo_mVolts(value_digit_LDR);
-        ADC_DelSig_StopConvert();
+       // ADC_DelSig_StopConvert();
 	    PacketReadyFlagLDR=1;
     }
 }
@@ -90,6 +90,7 @@ void EZI2C_ISR_ExitCallback(void)
         Timer_WritePeriod(slaveBuffer[1]-1);
         Timer_WriteCounter(slaveBuffer[1]-1);
         Timer_Start();
+        slaveBuffer[1]=Timer_ReadPeriod();
         timer_period = slaveBuffer[1];
     }
     else
