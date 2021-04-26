@@ -7,13 +7,27 @@
 #include "project.h"
 
 
+extern volatile uint8 PacketReadyFlagLDR;
+extern volatile uint8 PacketReadyFlagTemp;
+extern volatile uint8_t slaveBuffer[SLAVE_BUFFER_SIZE];
+extern volatile uint8_t control_reg_0 ;
+extern volatile uint8_t channel_0_ON ;
+extern volatile uint8_t channel_1_ON ;
+extern volatile int32 value_digit_Temp ;
+extern volatile int32 value_mv_Temp ;
+extern volatile int32 value_digit_LDR;
+extern volatile int32 value_mv_LDR ;
+extern volatile uint8_t samples ;
+extern volatile int16 timer_period ;
 uint8_t new_sample = 0;
 
 
 CY_ISR(Custom_ISR_ADC){
     Timer_ReadStatusRegister();
     if(channel_0_ON){
+        AMux_Stop();
         AMux_Select(CHANNEL_0_TEMP);
+        AMux_Start();
         ADC_DelSig_StartConvert();
         value_digit_Temp = ADC_DelSig_Read32();
         if (value_digit_Temp < 0) value_digit_Temp = 0;
@@ -23,7 +37,9 @@ CY_ISR(Custom_ISR_ADC){
 	    PacketReadyFlagTemp=1;
     }
     if(channel_1_ON){
+        AMux_Stop();
         AMux_Select(CHANNEL_1_LDR);
+        AMux_Start();
         ADC_DelSig_StartConvert();
         value_digit_LDR = ADC_DelSig_Read32();
         if (value_digit_LDR < 0) value_digit_LDR = 0;
@@ -72,7 +88,7 @@ void EZI2C_ISR_ExitCallback(void)
     {   
         Timer_Stop();
         Timer_WritePeriod(slaveBuffer[1]-1);
-        Timer_WriteCounter(Timer_ReadPeriod());
+        Timer_WriteCounter(slaveBuffer[1]-1);
         Timer_Start();
         timer_period = slaveBuffer[1];
     }

@@ -21,13 +21,26 @@ uint8_t lsb_LDR = 0;
 uint8_t msb_temp = 0;
 uint8_t lsb_temp = 0;
 
+volatile uint8 PacketReadyFlagLDR = 0;
+volatile uint8 PacketReadyFlagTemp = 0;
+volatile uint8_t slaveBuffer[SLAVE_BUFFER_SIZE];
+volatile uint8_t control_reg_0 = 0x00;
+volatile uint8_t channel_0_ON = 0;
+volatile uint8_t channel_1_ON = 0;
+volatile int32 value_digit_Temp = 0;
+volatile int32 value_mv_Temp = 0;
+volatile int32 value_digit_LDR = 0;
+volatile int32 value_mv_LDR = 0;
+volatile uint8_t samples = 0;
+volatile int16 timer_period = 0;
+
 
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
     ADC_DelSig_Start();
     Timer_Start();
-    AMux_Init();
+    AMux_Start();
     isr_ADC_StartEx(Custom_ISR_ADC);
     ADC_DelSig_StartConvert();
     EZI2C_Start();
@@ -49,46 +62,45 @@ int main(void)
     for(;;)
     
     { 
-        if(channel_0_ON){
-            while (PacketReadyFlagTemp == 0){}
+        if(channel_0_ON && (PacketReadyFlagTemp==1)){
             Temp_values += value_mv_Temp;
             PacketReadyFlagTemp = 0;
             count_Temp++;
+        }
          
-            if (count_Temp == samples){
-                count_Temp = 0;
+            if (count_Temp == samples){ 
                 mean_temp = Temp_values/samples;
                 msb_temp = mean_temp>>8;
                 lsb_temp = (mean_temp & 0xFF);
                 //Registers writing
                 slaveBuffer[3] = msb_temp;
                 slaveBuffer[4] = lsb_temp;
-                
+                count_Temp = 0;
                 Temp_values = 0;
                 mean_temp = 0;   
             }
                 
-        }
-        if(channel_1_ON){
-            while (PacketReadyFlagLDR == 0){}
+        
+        if(channel_1_ON && (PacketReadyFlagLDR==1)){
             PacketReadyFlagLDR = 0;
             LDR_values += value_mv_LDR;
-            count_LDR++;   
+            count_LDR++;  
+        }
             
             if (count_LDR == samples){
-                count_LDR=0;
                 mean_LDR=LDR_values/samples;
                 msb_LDR =mean_LDR>>8;
                 lsb_LDR = (mean_LDR & 0xFF);
                 //Registers writing
                 slaveBuffer[5]=msb_LDR;
                 slaveBuffer[6]=lsb_LDR;
-                
+                count_LDR=0;
                 LDR_values=0;
                 mean_LDR=0;   
             }
-                
-        }       
-    }
+               
+        }
 }
+    
+
 /* [] END OF FILE */

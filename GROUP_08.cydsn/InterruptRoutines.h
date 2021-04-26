@@ -28,7 +28,7 @@
     
     //VARIABLE DEFINITIONS
     
-    volatile uint8 PacketReadyFlagLDR = 0;
+  /*  volatile uint8 PacketReadyFlagLDR = 0;
     volatile uint8 PacketReadyFlagTemp = 0;
     volatile uint8_t slaveBuffer[SLAVE_BUFFER_SIZE];
     volatile uint8_t control_reg_0 = 0x00;
@@ -39,7 +39,7 @@
     volatile int32 value_digit_LDR = 0;
     volatile int32 value_mv_LDR = 0;
     volatile uint8_t samples = 0;
-    volatile int16 timer_period = 0;
+    volatile int16 timer_period = 0;*/
     
 #endif
     
