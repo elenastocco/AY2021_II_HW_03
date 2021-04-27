@@ -6,8 +6,6 @@
 #include "InterruptRoutines.h"
 #include "project.h"
 
-
-
 extern volatile uint8 PacketReadyFlagLDR;
 extern volatile uint8 PacketReadyFlagTemp;
 extern volatile uint8_t slaveBuffer[SLAVE_BUFFER_SIZE];
