@@ -28,24 +28,20 @@ CY_ISR(Custom_ISR_ADC){
         AMux_Stop();
         AMux_Select(CHANNEL_0_TEMP);
         AMux_Start();
-        //ADC_DelSig_StartConvert();
         value_digit_Temp = ADC_DelSig_Read32();
         if (value_digit_Temp < 0) value_digit_Temp = 0;
         if (value_digit_Temp >65535) value_digit_Temp = 65535;
         value_mv_Temp= ADC_DelSig_CountsTo_mVolts(value_digit_Temp);
-       //ADC_DelSig_StopConvert();
 	    PacketReadyFlagTemp=1;
     }
     if(channel_1_ON){
         AMux_Stop();
         AMux_Select(CHANNEL_1_LDR);
         AMux_Start();
-        //ADC_DelSig_StartConvert();
         value_digit_LDR = ADC_DelSig_Read32();
         if (value_digit_LDR < 0) value_digit_LDR = 0;
         if (value_digit_LDR >65535) value_digit_LDR = 65535;
         value_mv_LDR= ADC_DelSig_CountsTo_mVolts(value_digit_LDR);
-        //ADC_DelSig_StopConvert();
 	    PacketReadyFlagLDR=1;
     }
 }
@@ -61,7 +57,7 @@ void EZI2C_ISR_ExitCallback(void)
     
     
     //UPDATE CONTROL REGISTER 0
-    if (slaveBuffer[0] != (control_reg_0 & 0x3f))
+    if (slaveBuffer[0] != control_reg_0)
     {
         //UPDATE STATE
         if((slaveBuffer[0] & SELECT_BIT_0) == 1) channel_0_ON = 1;
@@ -72,7 +68,7 @@ void EZI2C_ISR_ExitCallback(void)
         //UPDATE NUMBER OF SAMPLES FOR AVERAGE (Bit 2-5)
         new_sample=(slaveBuffer[0] & SELECT_BIT_2_5)>>2;
         if(new_sample != samples) samples = new_sample;
-        slaveBuffer[0]|= (control_reg_0 & 0xc0);
+        
         control_reg_0 = slaveBuffer[0];
         
     } 

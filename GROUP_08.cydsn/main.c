@@ -24,7 +24,7 @@ uint8_t lsb_temp = 0;
 volatile uint8 PacketReadyFlagLDR = 0;
 volatile uint8 PacketReadyFlagTemp = 0;
 volatile uint8_t slaveBuffer[SLAVE_BUFFER_SIZE];
-volatile uint8_t control_reg_0 = 0x00;
+volatile uint8_t control_reg_0 = CONTROL_REG_0_INIT;
 volatile uint8_t channel_0_ON = 0;
 volatile uint8_t channel_1_ON = 0;
 volatile int32 value_digit_Temp = 0;
@@ -48,8 +48,7 @@ int main(void)
     timer_period = Timer_ReadCounter();
     
     //REGISTERS INITIALIZATION
-    slaveBuffer[0] &= INIT_CONTROL_REG_0;//Control Register 0
-    control_reg_0 = slaveBuffer[0];
+    slaveBuffer[0] = CONTROL_REG_0_INIT;//Control Register 0
     slaveBuffer[1] = timer_period; //Control Register 1
     slaveBuffer[2] = 0xBC; //Who Am I Register
     slaveBuffer[3] = 0x00;//Ch0 Bit 15-8

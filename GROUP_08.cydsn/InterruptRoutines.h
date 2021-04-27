@@ -14,11 +14,12 @@
     #define CONTROL_REG_0_INIT 0x00
     #define CHANNEL_0_TEMP 0 
     #define CHANNEL_1_LDR 1
+    
     //MASKS to select bit in Control Register 0
     #define SELECT_BIT_0 0x01
     #define SELECT_BIT_1 0x02
     #define SELECT_BIT_2_5 0x3C
-    #define INIT_CONTROL_REG_0 0xc0
+    
     //LED
     #define HIGH 1
     #define LOW 0
