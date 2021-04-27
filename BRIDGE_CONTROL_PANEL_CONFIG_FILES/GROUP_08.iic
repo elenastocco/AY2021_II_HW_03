@@ -1,0 +1,46 @@
+
+; User can select the number of samples used to compute the average, the Timer Period to modulate the isr Frequency and the Transmission Frequency.
+; Transmission frequency is equal to the clock frequency (5 kHz) divided by the number of samples times the timer period.
+; By inverting the formula is possible to determine the timer period needed to change the number of samples mantaining the trasmission frequency at 
+; almost 50 Hz.
+; In order to modify the number of samples and the active channel, write on the 0x00 register consequently write in the 0x01 register the opportune 
+; period
+
+; EX: 2 samples, transmission frequency 50 Hz, both channels
+;W 08 00 0b p  
+;W 08 01 32 p
+; EX: 5 samples, transmission frequency 50 Hz, both channels 
+;W 08 00 17 p
+;W 08 01 14 p
+; EX: 5 samples, transmission frequency 50 Hz, just LDR
+;W 08 00 16 p
+;W 08 01 14 p
+; EX: 5 samples. transmission frequency 50 Hz, just Temp
+;W 08 00 15 p
+;W 08 01 14 p
+; EX: 5 samples, transmission frequency 10 Hz, both channels
+;w 08 00 17 p
+;w 08 01 64 p
+; EX: 5 samples, transmission frequency 100 Hz, both channel
+; w 08 00 17 p
+; w 08 01 0a p
+; Ex: 10 samples, transmission frequency 50 Hz, both channels
+;W 08 00 2b p 
+;W 08 01 0a p
+; Ex: 10 samples, transmission frequency 50 Hz, LDR
+;w 08 00 2a p
+;w 08 01 0a p
+; Ex: 10 samples, transmission frequency 50 Hz, Temp
+; w 08 00 29 p
+; w 08 01 0a p
+
+; Instructions to plot data coming from I2C:
+; LDR channel selected: select the rows and click on repeat 
+;W 08 05 P
+;r 08 @1LDR @0LDR p 
+;Temp channel selected:
+;W 08 03 P
+;R 08 @1temp @0temp P
+;Both channel selected:
+;w 08 03 p
+;r 08 @1temp @0temp @1LDR @0LDR
